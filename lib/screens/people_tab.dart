@@ -30,7 +30,6 @@ class PeopleTab extends StatefulWidget {
 }
 
 class _PeopleTabState extends State<PeopleTab> {
-  // Dummy data for demo purposes.
   final List<Person> people = [
     Person(
       name: "Sanika",
@@ -38,7 +37,7 @@ class _PeopleTabState extends State<PeopleTab> {
       pronouns: "she/her",
       jobTitle: "Logistics Operative",
       location: "Manchester, UK",
-      shortBio: "New here, excited to connect!",
+      shortBio: "New here, excited to connect!\nLoves art and travel.",
       imageUrl: "https://picsum.photos/400/600?random=1",
     ),
     Person(
@@ -47,7 +46,7 @@ class _PeopleTabState extends State<PeopleTab> {
       pronouns: "he/him",
       jobTitle: "Software Engineer",
       location: "Bangalore, India",
-      shortBio: "Loves coding and coffee.",
+      shortBio: "Coffee lover. Passionate about coding.\nAlways learning.",
       imageUrl: "https://picsum.photos/400/600?random=2",
     ),
     Person(
@@ -56,7 +55,7 @@ class _PeopleTabState extends State<PeopleTab> {
       pronouns: "she/her",
       jobTitle: "Data Analyst",
       location: "Pune, India",
-      shortBio: "Passionate about data and design.",
+      shortBio: "Data & design enthusiast.\nMusic, movies, and more.",
       imageUrl: "https://picsum.photos/400/600?random=3",
     ),
   ];
@@ -65,14 +64,17 @@ class _PeopleTabState extends State<PeopleTab> {
 
   @override
   Widget build(BuildContext context) {
-    // Create a list of cards using our PersonCard widget.
-    final List<Widget> cards = people
-        .map((person) => PersonCard(person: person))
-        .toList();
+    double screenHeight = MediaQuery.of(context).size.height;
+    double bottomNavBarHeight = kBottomNavigationBarHeight; // Default 56dp
+    double windowHeight = screenHeight - bottomNavBarHeight;
+
+    final List<Widget> cards = people.map((person) => SingleChildScrollView(
+      child: PersonCard(person: person, windowHeight: windowHeight),
+    )).toList();
 
     return Container(
-      color: Colors.grey[300], // Background for the People tab.
-      padding: const EdgeInsets.all(10),
+      color: Colors.grey[300],
+      padding: const EdgeInsets.all(5),
       child: cards.isEmpty
           ? const Center(
         child: Text(
@@ -82,20 +84,16 @@ class _PeopleTabState extends State<PeopleTab> {
       )
           : TCard(
         controller: _tCardController,
+        size: Size(MediaQuery.of(context).size.width, windowHeight),
+        lockYAxis: true,
+        slideSpeed: 20,
+        delaySlideFor: 200,
         cards: cards,
         onEnd: () {
-          // Optionally, you can show a message when all cards are swiped.
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("You've seen all profiles")),
           );
         },
-        // Uncomment the next lines to handle swipe events if needed:
-        // onForward: (index, info) {
-        //   print("Card at index $index swiped with info: $info");
-        // },
-        // onBack: (index) {
-        //   print("Reverted to card index $index");
-        // },
       ),
     );
   }
@@ -103,108 +101,101 @@ class _PeopleTabState extends State<PeopleTab> {
 
 class PersonCard extends StatelessWidget {
   final Person person;
-  const PersonCard({Key? key, required this.person}) : super(key: key);
+  final double windowHeight;
+
+  const PersonCard({Key? key, required this.person, required this.windowHeight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Set the card height to nearly full screen.
-    double cardHeight = MediaQuery.of(context).size.height * 0.95;
-    double cardWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.all(10), // 10dp padding from all sides.
+      padding: const EdgeInsets.all(5),
       child: Card(
-        color: Colors.blue, // Blue background for the card.
+        color: Colors.blue,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // Well-rounded corners.
+          borderRadius: BorderRadius.circular(20),
         ),
         elevation: 4,
-        child: Container(
-          height: cardHeight,
-          width: cardWidth,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Image section – occupies 60% of card height.
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  child: Image.network(
-                    person.imageUrl,
-                    height: cardHeight * 0.6,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: cardHeight * 0.6,
-                        color: Colors.blue,
-                      );
-                    },
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${person.name}, ${person.age}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        person.jobTitle,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        person.location,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        person.shortBio,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      // Compliment Button.
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Compliment sent to ${person.name}!'),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.favorite),
-                          label: const Text('Compliment'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pinkAccent,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                child: Image.network(
+                  person.imageUrl,
+                  height: windowHeight, // Image covers entire window()
+                  width: double.infinity,
+                  fit: BoxFit.cover, // Ensures image covers without distortion
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: windowHeight,
+                      color: Colors.blue,
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${person.name}, ${person.age}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      person.jobTitle,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      person.location,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      person.shortBio,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Compliment sent to ${person.name}!'),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.favorite),
+                        label: const Text('Compliment'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pinkAccent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
