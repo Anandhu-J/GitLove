@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tcard/tcard.dart';
+import 'profiles_end_screen.dart';
 
 // Data model representing a person.
 class Person {
@@ -9,7 +10,7 @@ class Person {
   final String jobTitle;
   final String location;
   final String shortBio;
-  final String imageUrl;
+  final List<String?> imageList;
 
   Person({
     required this.name,
@@ -18,7 +19,7 @@ class Person {
     required this.jobTitle,
     required this.location,
     required this.shortBio,
-    required this.imageUrl,
+    required this.imageList,
   });
 }
 
@@ -38,25 +39,70 @@ class _PeopleTabState extends State<PeopleTab> {
       jobTitle: "Logistics Operative",
       location: "Manchester, UK",
       shortBio: "New here, excited to connect!\nLoves art and travel.",
-      imageUrl: "https://picsum.photos/400/600?random=1",
+      imageList: [
+        "https://picsum.photos/400/600?random=1",
+        "https://picsum.photos/400/600?random=2",
+        "https://picsum.photos/400/600?random=3"
+      ],
     ),
     Person(
-      name: "Rahul",
+      name: "Abin",
       age: 28,
       pronouns: "he/him",
       jobTitle: "Software Engineer",
       location: "Bangalore, India",
       shortBio: "Coffee lover. Passionate about coding.\nAlways learning.",
-      imageUrl: "https://picsum.photos/400/600?random=2",
+      imageList: [
+        "https://picsum.photos/400/600?random=2",
+        "https://picsum.photos/400/600?random=1",
+        "https://picsum.photos/400/600?random=5",
+        "https://picsum.photos/400/600?random=4"
+      ],
     ),
     Person(
-      name: "Aisha",
+      name: "Rizwana",
       age: 26,
       pronouns: "she/her",
       jobTitle: "Data Analyst",
       location: "Pune, India",
       shortBio: "Data & design enthusiast.\nMusic, movies, and more.",
-      imageUrl: "https://picsum.photos/400/600?random=3",
+      imageList: [
+        "https://picsum.photos/400/600?random=3",
+        "https://picsum.photos/400/600?random=2",
+        "https://picsum.photos/400/600?random=1",
+        "https://picsum.photos/400/600?random=6",
+        "https://picsum.photos/400/600?random=5"
+      ],
+    ),
+    Person(
+      name: "Basil",
+      age: 24,
+      pronouns: "he/him",
+      jobTitle: "Logistics Operative",
+      location: "Manchester, UK",
+      shortBio: "New here, excited to connect!\nLoves art and travel.",
+      imageList: ["https://picsum.photos/400/600?random=4"],
+    ),
+    Person(
+      name: "Rinsh",
+      age: 28,
+      pronouns: "he/him",
+      jobTitle: "Software Engineer",
+      location: "Bangalore, India",
+      shortBio: "Coffee lover. Passionate about coding.\nAlways learning.",
+      imageList: [
+        "https://picsum.photos/400/600?random=5",
+        "https://picsum.photos/400/600?random=1"
+      ],
+    ),
+    Person(
+      name: "Alphonsa",
+      age: 26,
+      pronouns: "she/her",
+      jobTitle: "Data Analyst",
+      location: "Pune, India",
+      shortBio: "Data & design enthusiast.\nMusic, movies, and more.",
+      imageList: ["https://picsum.photos/400/600?random=6"],
     ),
   ];
 
@@ -68,33 +114,31 @@ class _PeopleTabState extends State<PeopleTab> {
     double bottomNavBarHeight = kBottomNavigationBarHeight; // Default 56dp
     double windowHeight = screenHeight - bottomNavBarHeight;
 
-    final List<Widget> cards = people.map((person) => SingleChildScrollView(
-      child: PersonCard(person: person, windowHeight: windowHeight),
-    )).toList();
+    final List<Widget> cards = people
+        .map((person) => SingleChildScrollView(
+              child: PersonCard(person: person, windowHeight: windowHeight),
+            ))
+        .toList();
 
     return Container(
       color: Colors.grey[300],
       padding: const EdgeInsets.all(5),
       child: cards.isEmpty
-          ? const Center(
-        child: Text(
-          "No more profiles",
-          style: TextStyle(fontSize: 24),
-        ),
-      )
+          ? const ProfilesEndScreen()
           : TCard(
-        controller: _tCardController,
-        size: Size(MediaQuery.of(context).size.width, windowHeight),
-        lockYAxis: true,
-        slideSpeed: 20,
-        delaySlideFor: 200,
-        cards: cards,
-        onEnd: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("You've seen all profiles")),
-          );
-        },
-      ),
+              controller: _tCardController,
+              size: Size(MediaQuery.of(context).size.width, windowHeight),
+              lockYAxis: true,
+              slideSpeed: 20,
+              delaySlideFor: 200,
+              cards: cards,
+              onEnd: () {
+                setState(() {
+                  people
+                      .clear(); // ✅ Remove all profiles when last card is swiped
+                });
+              },
+            ),
     );
   }
 }
@@ -103,7 +147,8 @@ class PersonCard extends StatelessWidget {
   final Person person;
   final double windowHeight;
 
-  const PersonCard({Key? key, required this.person, required this.windowHeight}) : super(key: key);
+  const PersonCard({Key? key, required this.person, required this.windowHeight})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,23 +160,22 @@ class PersonCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         elevation: 4,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var imageUrl in person.imageList) ...[
               ClipRRect(
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
                 child: Image.network(
-                  person.imageUrl,
-                  height: windowHeight, // Image covers entire window()
+                  imageUrl!!,
+                  height: windowHeight * 0.5,
                   width: double.infinity,
-                  fit: BoxFit.cover, // Ensures image covers without distortion
+                  fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
-                      height: windowHeight,
+                      height: windowHeight * 0.5,
                       color: Colors.blue,
                     );
                   },
@@ -175,28 +219,11 @@ class PersonCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Compliment sent to ${person.name}!'),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.favorite),
-                        label: const Text('Compliment'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.pinkAccent,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ],
-          ),
+          ],
         ),
       ),
     );
