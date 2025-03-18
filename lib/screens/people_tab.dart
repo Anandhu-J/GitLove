@@ -33,7 +33,7 @@ class PeopleTab extends StatefulWidget {
 class _PeopleTabState extends State<PeopleTab> {
   final List<Person> people = [
     Person(
-      name: "Sanika",
+      name: "Anandhu",
       age: 24,
       pronouns: "she/her",
       jobTitle: "Logistics Operative",
@@ -169,8 +169,8 @@ class PersonCard extends StatelessWidget {
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)),
                 child: Image.network(
-                  imageUrl!!,
-                  height: windowHeight * 0.5,
+                  imageUrl!,
+                  height: windowHeight * 0.65,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
@@ -218,7 +218,7 @@ class PersonCard extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

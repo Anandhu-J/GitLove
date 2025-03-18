@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
-import 'people_tab.dart'; // Import PeopleTab.
+import 'people_tab.dart';
+import 'chat_list_screen.dart';
 
 // Placeholder screens for the other tabs.
 class ProfileScreen extends StatelessWidget {
@@ -44,11 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 2;
 
   final List<Widget> _pages = [
-    const ProfileScreen(),         // Index 0.
-    const NoticeBoardScreen(),     // Index 1.
-    PeopleTab(),                   // Index 2: People tab.
-    const LikedYouScreen(),        // Index 3.
-    const ChatsScreen(),           // Index 4.
+    const ProfileScreen(), // Index 0.
+    const NoticeBoardScreen(), // Index 1.
+    PeopleTab(), // Index 2: People tab.
+    const LikedYouScreen(), // Index 3.
+    ChatListScreen(), // Index 4.
   ];
 
   void _onTabTapped(int index) {
