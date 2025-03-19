@@ -3,13 +3,7 @@ import '../widgets/custom_bottom_nav_bar.dart';
 import 'people_tab.dart';
 import 'chat_list_screen.dart';
 import 'profile_screen.dart';
-
-class NoticeBoardScreen extends StatelessWidget {
-  const NoticeBoardScreen({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) =>
-      const Center(child: Text('Notice Board Screen'));
-}
+import 'error_screen.dart';
 
 class LikedYouScreen extends StatelessWidget {
   const LikedYouScreen({Key? key}) : super(key: key);
@@ -32,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
     ProfileScreen(), // Index 0.
-    const NoticeBoardScreen(), // Index 1.
+    ErrorScreen(), // Index 1.
     PeopleTab(), // Index 2: People tab.
     const LikedYouScreen(), // Index 3.
     ChatListScreen(), // Index 4.
