@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import 'people_tab.dart';
 import 'chat_list_screen.dart';
-
-// Placeholder screens for the other tabs.
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) =>
-      const Center(child: Text('Profile Screen'));
-}
+import 'profile_screen.dart';
 
 class NoticeBoardScreen extends StatelessWidget {
   const NoticeBoardScreen({Key? key}) : super(key: key);
@@ -25,13 +18,6 @@ class LikedYouScreen extends StatelessWidget {
       const Center(child: Text('Liked You Screen'));
 }
 
-class ChatsScreen extends StatelessWidget {
-  const ChatsScreen({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) =>
-      const Center(child: Text('Chats Screen'));
-}
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -45,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 2;
 
   final List<Widget> _pages = [
-    const ProfileScreen(), // Index 0.
+    ProfileScreen(), // Index 0.
     const NoticeBoardScreen(), // Index 1.
     PeopleTab(), // Index 2: People tab.
     const LikedYouScreen(), // Index 3.

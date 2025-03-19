@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class EmptyChatScreen extends StatelessWidget {
@@ -19,7 +18,7 @@ class EmptyChatScreen extends StatelessWidget {
               alignment: Alignment.center,
             ),
             SizedBox(height: 20),
-            Text(
+            const Text(
               "Oops, it's lonely here! Start a chat now. 😜",
               textAlign: TextAlign.center,
               style: TextStyle(

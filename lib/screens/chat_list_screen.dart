@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:git_love/screens/detailed_chat_screen.dart';
 import 'package:git_love/screens/empty_chat_screen.dart';
 
 class Chat {
@@ -20,24 +21,24 @@ class ChatListScreen extends StatelessWidget {
 
   // Mock Data (Replace this with API data later)
   final List<Chat> chats = [
-    // Chat(
-    //   name: "Sanika",
-    //   profilePic: "https://picsum.photos/50/50?random=1",
-    //   lastMessage: "Hey, how's it going?",
-    //   time: DateTime.now().subtract(Duration(minutes: 5)),
-    // ),
-    // Chat(
-    //   name: "Abin",
-    //   profilePic: "https://picsum.photos/50/50?random=2",
-    //   lastMessage: "Let's meet up tomorrow.",
-    //   time: DateTime.now().subtract(Duration(hours: 1)),
-    // ),
-    // Chat(
-    //   name: "Neha",
-    //   profilePic: "https://picsum.photos/50/50?random=3",
-    //   lastMessage: "Loved our last conversation!",
-    //   time: DateTime.now().subtract(Duration(hours: 3)),
-    // ),
+    Chat(
+      name: "Sanika",
+      profilePic: "https://picsum.photos/50/50?random=1",
+      lastMessage: "Hey, how's it going?",
+      time: DateTime.now().subtract(Duration(minutes: 5)),
+    ),
+    Chat(
+      name: "Abin",
+      profilePic: "https://picsum.photos/50/50?random=2",
+      lastMessage: "Let's meet up tomorrow.",
+      time: DateTime.now().subtract(Duration(hours: 1)),
+    ),
+    Chat(
+      name: "Neha",
+      profilePic: "https://picsum.photos/50/50?random=3",
+      lastMessage: "Loved our last conversation!",
+      time: DateTime.now().subtract(Duration(hours: 3)),
+    ),
   ];
 
   @override
@@ -72,7 +73,15 @@ class ChatListScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                   onTap: () {
-                    // Navigate to chat details screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailedChatScreen(
+                          name: chat.name,
+                          profilePic: chat.profilePic,
+                        ),
+                      ),
+                    );
                   },
                 );
               },
